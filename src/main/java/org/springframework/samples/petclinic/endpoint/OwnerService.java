@@ -9,6 +9,7 @@ import org.springframework.samples.petclinic.backend.owner.OwnerName;
 import org.springframework.samples.petclinic.backend.owner.OwnerRepository;
 import org.springframework.samples.petclinic.backend.owner.Pet;
 import org.springframework.samples.petclinic.backend.visit.VisitRepository;
+import org.springframework.samples.petclinic.endpoint.record.OwnerRecord;
 
 import com.vaadin.flow.server.auth.AnonymousAllowed;
 import com.vaadin.hilla.BrowserCallable;
@@ -29,32 +30,33 @@ public class OwnerService {
 		return ownerRepository;
 	}
 
-	public Page<Owner> findByLastName(String lastName, Pageable pageable) {
-		return getRepository().findByLastName(lastName, pageable);
+	public Page<OwnerRecord> findByLastName(String lastName, Pageable pageable) {
+		return getRepository().findByLastName(lastName, pageable).map(OwnerRecord::fromOwner);
 	}
+
 	public int countByLastName(String lastName) {
 		return getRepository().countByLastName(lastName);
 	}
 
 	public OwnerName findPersonById(Integer id) {
 		Optional<OwnerName> personById = getRepository().findPersonById(id);
-		return personById.get();
+		return personById.orElseThrow();
 	}
 
-	public Owner findOwner(Integer ownerId) {
-		Owner owner = getRepository().findById(ownerId).get();
+	public OwnerRecord findOwner(Integer ownerId) {
+		Owner owner = getRepository().findById(ownerId).orElseThrow();
 		for (Pet pet : owner.getPets()) {
 			visitRepository.findByPetId(pet.getId()).forEach(pet::addVisit);
 		}
 
-		return owner;
+		return OwnerRecord.fromOwner(owner);
 	}
 
-	public Owner save(Owner value) {
-		return getRepository().save(value);
+	public OwnerRecord save(OwnerRecord value) {
+		return OwnerRecord.fromOwner(getRepository().save(value.toOwner()));
 	}
 
-	public Optional<Owner> get(Integer petId) {
-		return getRepository().findById(petId);
+	public Optional<OwnerRecord> get(Integer petId) {
+		return getRepository().findById(petId).map(OwnerRecord::fromOwner);
 	}
 }

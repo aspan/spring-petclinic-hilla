@@ -47,11 +47,14 @@ export default function ValidationErrors({errors}: ValidationErrorsProps) {
                                             theme="tertiary-inline"
                                             tabindex={0} role="button"
                                             onClick={() => {
-                                                const inputElement = document.querySelector(`[name="${valueError.property}"]`);
+                                                let name = valueError.property as string;
+                                                name = name.replace(/\[/g, ".").replace(/]/g, "");
+                                                console.log(name)
+                                                const inputElement = document.querySelector(`[name="${name}"]`);
                                                 if (inputElement && (inputElement instanceof HTMLElement)) {
                                                     inputElement.focus();
                                                 }
-                                            }}>{valueError.validatorMessage ? translate(valueError.validatorMessage) : translate(valueError.message)}
+                                            }}>{translate(valueError.property as string)} {valueError.validatorMessage ? translate(valueError.validatorMessage) : translate(valueError.message)}
                                     </Button>
                                 </li>
                             ))}

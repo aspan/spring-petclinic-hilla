@@ -22,7 +22,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -30,11 +29,17 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Length;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.samples.petclinic.backend.model.NamedEntity;
 import org.springframework.samples.petclinic.backend.visit.Visit;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.vaadin.hilla.Nullable;
 
 /**
  * Simple business object representing a pet.
@@ -62,6 +67,10 @@ public class Pet extends NamedEntity {
 	@JoinColumn(name = "owner_id")
 	private Owner owner;
 
+	@Length(min = 3, max = 100)
+	@Nullable
+	private String description;
+
 	@Transient
 	private Set<Visit> visits = new LinkedHashSet<>();
 
@@ -85,8 +94,16 @@ public class Pet extends NamedEntity {
 		return this.owner;
 	}
 
-	protected void setOwner(Owner owner) {
+	public void setOwner(Owner owner) {
 		this.owner = owner;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	protected Set<Visit> getVisitsInternal() {

@@ -8,14 +8,13 @@ import {
 } from "@vaadin/react-components";
 import {translate} from "@vaadin/hilla-react-i18n";
 import {useForm, useFormArrayPart} from "@vaadin/hilla-react-form";
-import OwnerModel
-    from "../../../generated/org/springframework/samples/petclinic/backend/owner/OwnerModel";
 import {Button} from "@vaadin/react-components/Button.js";
 import {OwnerService} from "../../../generated/endpoints";
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect} from "react";
 import {ViewConfig} from "@vaadin/hilla-file-router/types.js";
 import {HorizontalLayout} from "@vaadin/react-components/HorizontalLayout.js";
+import OwnerRecordModel from 'Frontend/generated/org/springframework/samples/petclinic/endpoint/record/OwnerRecordModel';
 
 export const config: ViewConfig = {
     menu: { exclude: true}
@@ -24,7 +23,7 @@ export const config: ViewConfig = {
 export default function ViewOwnerView() {
     const { ownerId } = useParams();
     const navigate = useNavigate();
-    const { read, model, submit,  field } = useForm(OwnerModel, {
+    const { read, model, submit,  field } = useForm(OwnerRecordModel, {
         onSubmit: async (owner) => {
             const savedOwner = await OwnerService.save(owner);
             if (savedOwner) {

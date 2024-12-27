@@ -25,6 +25,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
 import org.springframework.beans.support.MutableSortDefinition;
@@ -62,8 +63,9 @@ public class Owner extends Person {
 	@Digits(fraction = 0, integer = 10, message = "The phone number must be a number of maximum 10 digits")
 	private String telephone;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.EAGER)
-	private Set<Pet> pets;
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "owner", fetch = FetchType.EAGER, orphanRemoval = true)
+	@Valid
+	private Set<@Valid Pet> pets;
 
 	public String getAddress() {
 		return this.address;
@@ -96,7 +98,7 @@ public class Owner extends Person {
 		return this.pets;
 	}
 
-	protected void setPetsInternal(Set<Pet> pets) {
+	public void setPetsInternal(Set<Pet> pets) {
 		this.pets = pets;
 	}
 

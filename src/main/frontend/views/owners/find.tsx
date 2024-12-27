@@ -12,19 +12,18 @@ import {
     countByLastName,
     findByLastName
 } from "../../generated/OwnerService";
-import Owner
-    from "../../generated/org/springframework/samples/petclinic/backend/owner/Owner";
 import {HorizontalLayout} from "@vaadin/react-components/HorizontalLayout.js";
 import {TextField} from "@vaadin/react-components/TextField.js";
 import {Button} from "@vaadin/react-components/Button.js";
 import {NavLink, useNavigate} from "react-router-dom";
+import OwnerRecord from 'Frontend/generated/org/springframework/samples/petclinic/endpoint/record/OwnerRecord';
 
 export const config: ViewConfig = {
   menu: { order: 1, icon: 'vaadin:search' },
   title: 'findOwners',
 };
 
-type OwnerEnhanced = Owner & { fullName: string };
+type OwnerEnhanced = OwnerRecord & { fullName: string };
 
 async function fetchOwners(params: {
     page: number;
@@ -64,8 +63,8 @@ export default function FindOwnersView() {
     const dataProvider = useMemo(
         () =>
             async (
-                params: GridDataProviderParams<Owner>,
-                callback: GridDataProviderCallback<Owner>
+                params: GridDataProviderParams<OwnerRecord>,
+                callback: GridDataProviderCallback<OwnerRecord>
             ) => {
                 const { page, pageSize, sortOrders } = params;
 

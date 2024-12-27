@@ -6,8 +6,6 @@ import {
 } from "@vaadin/react-components";
 import {translate} from "@vaadin/hilla-react-i18n";
 import {useForm} from "@vaadin/hilla-react-form";
-import OwnerModel
-    from "../../generated/org/springframework/samples/petclinic/backend/owner/OwnerModel";
 import {Button} from "@vaadin/react-components/Button.js";
 import {OwnerService} from "../../generated/endpoints";
 import {useNavigate} from "react-router-dom";
@@ -16,6 +14,7 @@ import ValidationErrors, {
     handleKeyDown
 } from "../../ValidationErrors.js";
 import {useSignal} from "@vaadin/hilla-react-signals";
+import OwnerRecordModel from 'Frontend/generated/org/springframework/samples/petclinic/endpoint/record/OwnerRecordModel';
 
 
 export const config: ViewConfig = {
@@ -24,7 +23,7 @@ export const config: ViewConfig = {
 
 export default function NewOwnerView() {
     const navigate = useNavigate();
-    const {model, submit, field} = useForm(OwnerModel, {
+    const {model, submit, field} = useForm(OwnerRecordModel, {
         onSubmit: async (owner) => {
             const savedOwner = await OwnerService.save(owner);
             if (savedOwner) {
